@@ -24,24 +24,20 @@ public class Wadl2Latex {
 		Element element = (Element)node;
 		path = path.replace("{", "\\{");
 		path = path.replace("}", "\\}");
-		writer.println("\\");
-		writer.println();
+		//writer.println("\\\\");
 		writer.println("\\textbf{Method Name: }" + element.getAttribute("id"));
 		if(element.getAttribute("name").equals("GET")){
 			writer.println("\\begin{get}");
 			writer.println("/"+path);
 			writer.println("\\end{get}");
-			writer.println();
 		} else if(element.getAttribute("name").equals("POST")){
 			writer.println("\\begin{post}");
 			writer.println("/"+path);
 			writer.println("\\end{post}");
-			writer.println();
 		}  else if(element.getAttribute("name").equals("DELETE")){
 			writer.println("\\begin{delete}");
 			writer.println("/"+path);
 			writer.println("\\end{delete}");
-			writer.println();
 		} 
 		NodeList requestResponse = node.getChildNodes();
 		for(int i = 0; i<requestResponse.getLength();i++){
@@ -56,7 +52,6 @@ public class Wadl2Latex {
 							writer.println(rEl.getAttribute("element")+" as "
 									+ (rEl.getAttribute("mediaType").equals("*/*")?"text/plain":rEl.getAttribute("mediaType")));
 							writer.println("\\end{request}");
-							writer.println();
 						}
 					}
 				} else if(requestResponse.item(i).getNodeName().equals("response")){
@@ -69,7 +64,6 @@ public class Wadl2Latex {
 							writer.println(rEl.getAttribute("element")+" as "
 									+ (rEl.getAttribute("mediaType").equals("*/*")?"text/plain":rEl.getAttribute("mediaType")));
 							writer.println("\\end{response}");
-							writer.println();
 						}
 					}
 
@@ -84,15 +78,15 @@ public class Wadl2Latex {
 		Element element = (Element)node;
 		
 		writer.println("\\begin{parameter}");
-		writer.println(element.getAttribute("name")+" as "+element.getAttribute("type"));
+		writer.println(element.getAttribute("name")+" as "+element.getAttribute("type").replace("xs:", ""));
 		writer.println("\\end{parameter}");
-		writer.println();
+		
 	}
 	
 	public static void main(String[] args)
 	{
 		File inputWadl = new File(args[0]);
-		
+		File inputModels = new File(args[1]);
 		Document doc = null;
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -120,14 +114,11 @@ public class Wadl2Latex {
 		
 		
 		try {
-			PrintWriter writer = new PrintWriter(args[1], "UTF-8");
+			PrintWriter writer = new PrintWriter(args[2], "UTF-8");
 			
-
-			writer.println("\\chapter{Documentation}");
-			writer.println("");
+			writer.println("\\chapter{Services}");
 			writer.println("\\section{Baseresource: }");
 			writer.println(((Element)resourcesNode).getAttribute("base") );
-			writer.println("");
 			
 			NodeList classResourceNodes = resourcesNode.getChildNodes();
 			
@@ -135,7 +126,6 @@ public class Wadl2Latex {
 				if (classResourceNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
 					if(classResourceNodes.item(i).getNodeName().equals("resource")){
 						writer.println("\\section{"+((Element)classResourceNodes.item(i)).getAttribute("path")+"}");
-						writer.println("");
 						
 						NodeList resourceNodes = classResourceNodes.item(i).getChildNodes();
 						for (int u = 0; u < resourceNodes.getLength(); u++) {
@@ -168,6 +158,59 @@ public class Wadl2Latex {
 					} 
 				}
 			}
+			
+			doc = null;
+			try {
+				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+				doc = dBuilder.parse(inputModels);
+			} catch (Exception e) {
+				System.err.println("could not read File");
+				return;
+			}
+			
+
+			writer.println("\\chapter{Models}");
+			
+			Node shemaNode = doc.getFirstChild();
+			NodeList shemaChildNodes = shemaNode.getChildNodes();
+			for (int i = 0; i < shemaChildNodes.getLength(); i++) {
+				if (shemaChildNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
+					if(shemaChildNodes.item(i).getNodeName().equals("xs:complexType")){
+						writer.println("\\section{"+((Element)shemaChildNodes.item(i)).getAttribute("name")+"}");
+						NodeList complexNodes = shemaChildNodes.item(i).getChildNodes();
+						for (int u = 0; u < complexNodes.getLength(); u++) {
+							Node node = complexNodes.item(u);
+
+							if (node.getNodeType() == Node.ELEMENT_NODE) {
+								if(node.getNodeName().equals("xs:sequence")){
+									NodeList propertyNodes = node.getChildNodes();
+									for (int k = 0; k < propertyNodes.getLength(); k++) {
+										Node propertyNode = propertyNodes.item(k);
+										if (propertyNode.getNodeType() == Node.ELEMENT_NODE) {
+											if(propertyNode.getNodeName().equals("xs:element")){
+												
+												Element element = (Element)propertyNode;
+												writer.println("\\begin{property}");
+												writer.println(element.getAttribute("name") + " as " + element.getAttribute("type").replace("xs:", ""));
+												writer.println("\\end{property}");
+												
+					
+											} 
+										}
+									}
+									
+		
+								} 
+							}
+						}
+					}
+						
+				}
+			}
+			
+			
+			
 			
 			writer.close();
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
