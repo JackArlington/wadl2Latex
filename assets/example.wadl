@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<application xmlns="http://wadl.dev.java.net/2009/02">
+    <doc xmlns:jersey="http://jersey.java.net/" jersey:generatedBy="Jersey: 1.9 09/02/2011 11:17 AM"/>
+    <grammars>
+        <include href="application.wadl/xsd0.xsd">
+            <doc title="Generated" xml:lang="en"/>
+        </include>
+    </grammars>
+    <resources base="http://localhost:8080/">
+        <resource path="/tradition">
+            <resource path="relation/{tradId}/relationships">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tradId" style="template" type="xs:string"/>
+                <method id="getAllRelationships" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="{tradId}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tradId" style="template" type="xs:string"/>
+                <method id="deleteUserById" name="DELETE">
+                    <response>
+                        <representation mediaType="*/*"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="{textId}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="textId" style="template" type="xs:string"/>
+                <method id="changeOwnerOfATradition" name="POST">
+                    <request>
+                        <representation mediaType="application/json"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="reading/{tradId}/{readId}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="readId" style="template" type="xs:long"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tradId" style="template" type="xs:string"/>
+                <method id="getReading" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="all">
+                <method id="getAllTraditions" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="duplicate/{tradId}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tradId" style="template" type="xs:string"/>
+                <method id="duplicateReading" name="POST">
+                    <request>
+                        <representation mediaType="application/json"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="merge/{tradId}/{firstReadId}/{secondReadId}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="secondReadId" style="template" type="xs:long"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tradId" style="template" type="xs:string"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="firstReadId" style="template" type="xs:long"/>
+                <method id="mergeReadings" name="POST">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="split/{tradId}/{readId}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="readId" style="template" type="xs:long"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tradId" style="template" type="xs:string"/>
+                <method id="splitReading" name="POST">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="witness/{tradId}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tradId" style="template" type="xs:string"/>
+                <method id="getAllWitnesses" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="get/{tradId}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tradId" style="template" type="xs:string"/>
+                <method id="getTradition" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="new">
+                <method id="importGraphMl" name="POST">
+                    <request>
+                        <representation mediaType="multipart/form-data"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="readings/{tradId}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tradId" style="template" type="xs:string"/>
+                <method id="getAllReadingsOfTradition" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="getdot/{tradId}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tradId" style="template" type="xs:string"/>
+                <method id="getDot" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/user">
+            <method id="getIt" name="GET">
+                <response>
+                    <representation mediaType="*/*"/>
+                </response>
+            </method>
+            <resource path="create">
+                <method id="create" name="POST">
+                    <request>
+                        <representation mediaType="application/json"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="{userId}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="userId" style="template" type="xs:string"/>
+                <method id="getUserById" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+                <method id="deleteUserById" name="DELETE">
+                    <response>
+                        <representation mediaType="*/*"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="traditions/{userId}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="userId" style="template" type="xs:string"/>
+                <method id="getTraditionsByUserId" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/witness">
+            <resource path="string/{tradId}/{textId}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="textId" style="template" type="xs:string"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tradId" style="template" type="xs:string"/>
+                <method id="getWitnessAsPlainText" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="string/rank/{tradId}/{textId}/{startRank}/{endRank}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="textId" style="template" type="xs:string"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="endRank" style="template" type="xs:string"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tradId" style="template" type="xs:string"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="startRank" style="template" type="xs:string"/>
+                <method id="getWitnssAsPlainText" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="list/{tradId}/{textId}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="textId" style="template" type="xs:string"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tradId" style="template" type="xs:string"/>
+                <method id="getWitnessAsReadings" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="reading/next/{tradId}/{textId}/{readId}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="textId" style="template" type="xs:string"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="readId" style="template" type="xs:long"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tradId" style="template" type="xs:string"/>
+                <method id="getNextReadingInWitness" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="reading/previous/{tradId}/{textId}/{readId}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="textId" style="template" type="xs:string"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="readId" style="template" type="xs:long"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tradId" style="template" type="xs:string"/>
+                <method id="getPreviousReadingInWitness" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/myresource">
+            <method id="getIt" name="GET">
+                <response>
+                    <representation mediaType="text/plain"/>
+                </response>
+            </method>
+        </resource>
+        <resource path="/relation">
+            <method id="getIt" name="GET">
+                <response>
+                    <representation mediaType="text/plain"/>
+                </response>
+            </method>
+            <resource path="{textId}/relationships/delete">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="textId" style="template" type="xs:string"/>
+                <method id="delete" name="POST">
+                    <request>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="relationshipModel" mediaType="application/json"/>
+                    </request>
+                    <response>
+                        <representation mediaType="*/*"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="{textId}/relationships">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="textId" style="template" type="xs:string"/>
+                <method id="create" name="POST">
+                    <request>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="relationshipModel" mediaType="application/json"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="{textId}/relationships/{relationshipId}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="textId" style="template" type="xs:string"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="relationshipId" style="template" type="xs:string"/>
+                <method id="deleteById" name="DELETE">
+                    <response>
+                        <representation mediaType="*/*"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+    </resources>
+</application>
