@@ -19,6 +19,76 @@ import org.w3c.dom.NodeList;
  *
  */
 public class Wadl2Latex {
+	
+	public static void printMethodNode(PrintWriter writer, Node node, String path){
+		Element element = (Element)node;
+		path = path.replace("{", "\\{");
+		path = path.replace("}", "\\}");
+		writer.println("\\");
+		writer.println();
+		writer.println("\\textbf{Method Name: }" + element.getAttribute("id"));
+		if(element.getAttribute("name").equals("GET")){
+			writer.println("\\begin{get}");
+			writer.println("/"+path);
+			writer.println("\\end{get}");
+			writer.println();
+		} else if(element.getAttribute("name").equals("POST")){
+			writer.println("\\begin{post}");
+			writer.println("/"+path);
+			writer.println("\\end{post}");
+			writer.println();
+		}  else if(element.getAttribute("name").equals("DELETE")){
+			writer.println("\\begin{delete}");
+			writer.println("/"+path);
+			writer.println("\\end{delete}");
+			writer.println();
+		} 
+		NodeList requestResponse = node.getChildNodes();
+		for(int i = 0; i<requestResponse.getLength();i++){
+			if(requestResponse.item(i).getNodeType() == Node.ELEMENT_NODE){
+				if(requestResponse.item(i).getNodeName().equals("request")){
+					NodeList requestNodeList = requestResponse.item(i).getChildNodes();
+					for(int k = 0; k<requestNodeList.getLength();k++){
+						if(requestNodeList.item(k).getNodeName().equals("representation")||
+								requestNodeList.item(k).getNodeName().equals("ns2:representation")){
+							Element rEl = (Element)requestNodeList.item(k);
+							writer.println("\\begin{request}");
+							writer.println(rEl.getAttribute("element")+" as "
+									+ (rEl.getAttribute("mediaType").equals("*/*")?"text/plain":rEl.getAttribute("mediaType")));
+							writer.println("\\end{request}");
+							writer.println();
+						}
+					}
+				} else if(requestResponse.item(i).getNodeName().equals("response")){
+					NodeList responseNodeList = requestResponse.item(i).getChildNodes();
+					for(int k = 0; k<responseNodeList.getLength();k++){
+						if(responseNodeList.item(k).getNodeName().equals("representation")||
+								responseNodeList.item(k).getNodeName().equals("ns2:representation")){
+							Element rEl = (Element)responseNodeList.item(k);
+							writer.println("\\begin{response}");
+							writer.println(rEl.getAttribute("element")+" as "
+									+ (rEl.getAttribute("mediaType").equals("*/*")?"text/plain":rEl.getAttribute("mediaType")));
+							writer.println("\\end{response}");
+							writer.println();
+						}
+					}
+
+					
+				}
+			} 
+		}
+		
+	}
+	
+	public static void printParam(PrintWriter writer, Node node){
+		Element element = (Element)node;
+		
+		writer.println("\\begin{parameter}");
+		writer.println(element.getAttribute("name")+" as "+element.getAttribute("type"));
+		writer.println("\\end{parameter}");
+		writer.println();
+	}
+	
 	public static void main(String[] args)
 	{
 		File inputWadl = new File(args[0]);
@@ -106,72 +176,5 @@ public class Wadl2Latex {
 		}
 	}
 	
-	public static void printMethodNode(PrintWriter writer, Node node, String path){
-		Element element = (Element)node;
-		path = path.replace("{", "\\{");
-		path = path.replace("}", "\\}");
-		writer.println("\\");
-		writer.println();
-		writer.println("\\textbf{Method Name: }" + element.getAttribute("id"));
-		if(element.getAttribute("name").equals("GET")){
-			writer.println("\\begin{get}");
-			writer.println("/"+path);
-			writer.println("\\end{get}");
-			writer.println();
-		} else if(element.getAttribute("name").equals("POST")){
-			writer.println("\\begin{post}");
-			writer.println("/"+path);
-			writer.println("\\end{post}");
-			writer.println();
-		}  else if(element.getAttribute("name").equals("DELETE")){
-			writer.println("\\begin{delete}");
-			writer.println("/"+path);
-			writer.println("\\end{delete}");
-			writer.println();
-		} 
-		NodeList requestResponse = node.getChildNodes();
-		for(int i = 0; i<requestResponse.getLength();i++){
-			if(requestResponse.item(i).getNodeType() == Node.ELEMENT_NODE){
-				if(requestResponse.item(i).getNodeName().equals("request")){
-					NodeList requestNodeList = requestResponse.item(i).getChildNodes();
-					for(int k = 0; k<requestNodeList.getLength();k++){
-						if(requestNodeList.item(k).getNodeName().equals("representation")||
-								requestNodeList.item(k).getNodeName().equals("ns2:representation")){
-							Element rEl = (Element)requestNodeList.item(k);
-							writer.println("\\begin{request}");
-							writer.println(rEl.getAttribute("element")+" as "
-									+ (rEl.getAttribute("mediaType").equals("*/*")?"text/plain":rEl.getAttribute("mediaType")));
-							writer.println("\\end{request}");
-							writer.println();
-						}
-					}
-				} else if(requestResponse.item(i).getNodeName().equals("response")){
-					NodeList responseNodeList = requestResponse.item(i).getChildNodes();
-					for(int k = 0; k<responseNodeList.getLength();k++){
-						if(responseNodeList.item(k).getNodeName().equals("representation")||
-								responseNodeList.item(k).getNodeName().equals("ns2:representation")){
-							Element rEl = (Element)responseNodeList.item(k);
-							writer.println("\\begin{response}");
-							writer.println(rEl.getAttribute("element")+" as "
-									+ (rEl.getAttribute("mediaType").equals("*/*")?"text/plain":rEl.getAttribute("mediaType")));
-							writer.println("\\end{response}");
-							writer.println();
-						}
-					}
 
-					
-				}
-			} 
-		}
-		
-	}
-	
-	public static void printParam(PrintWriter writer, Node node){
-		Element element = (Element)node;
-		
-		writer.println("\\begin{parameter}");
-		writer.println(element.getAttribute("name")+" as "+element.getAttribute("type"));
-		writer.println("\\end{parameter}");
-		writer.println();
-	}
 }
